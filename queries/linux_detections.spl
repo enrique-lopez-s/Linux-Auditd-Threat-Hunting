@@ -1,0 +1,26 @@
+################################################################################
+# CASO DE USO 1: Modificación de Cuentas y Credenciales (/etc/passwd, /etc/shadow)
+# Técnica MITRE: T1098 / T1078
+# Descripción: Detecta intentos de modificación en archivos de cuentas de usuario.
+################################################################################
+index=linux_audit (key="identity_changes" OR path="/etc/passwd" OR path="/etc/shadow")
+| table _time, host, auid, exe, path, key, res
+| sort - _time
+
+################################################################################
+# CASO DE USO 2: Escalación de Privilegios o Modificación de Sudoers
+# Técnica MITRE: T1548.001 / T1098
+# Descripción: Detecta cambios en el archivo /etc/sudoers o ejecución anómala de sudo.
+################################################################################
+index=linux_audit (key="privilege_escalation" OR path="/etc/sudoers" OR exe="*bin/sudo*")
+| table _time, host, auid, exe, command, res
+| sort - _time
+
+################################################################################
+# CASO DE USO 3: Persistencia mediante Cron Jobs / Tareas Programadas
+# Técnica MITRE: T1053.003
+# Descripción: Detecta edición de crontabs o archivos en /etc/cron.*
+################################################################################
+index=linux_audit (path="*cron*" OR exe="*bin/crontab*")
+| table _time, host, auid, exe, path, res
+| sort - _time

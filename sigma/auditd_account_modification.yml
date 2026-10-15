@@ -1,0 +1,23 @@
+title: Modificacion Sospechosa de Cuentas de Usuario en Linux (/etc/passwd)
+id: 3c4d5e6f-7890-12ab-cdef-3456789012cd
+status: experimental
+description: Detecta modificacion o acceso de escritura en archivos de autenticacion criticos (/etc/passwd, /etc/shadow) capturados por Auditd.
+references:
+    - https://attack.mitre.org/techniques/T1098/
+    - https://attack.mitre.org/techniques/T1078/
+author: Enrique Lopez
+date: 2026/10/14
+logsource:
+    product: linux
+    service: auditd
+detection:
+    selection:
+        type: 'PATH'
+        name|contains:
+            - '/etc/passwd'
+            - '/etc/shadow'
+        nametype: 'CREATE' # o MODIFY / WRITE
+    condition: selection
+falsepositives:
+    - Creación legítima de usuarios por administradores de sistemas usando useradd o usermod.
+level: high

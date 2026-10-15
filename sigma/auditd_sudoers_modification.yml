@@ -1,0 +1,19 @@
+title: Modificacion en /etc/sudoers o Escalacion de Privilegios via Auditd
+id: 4d5e6f7g-8901-23bc-defa-4567890123de
+status: experimental
+description: Detecta modificaciones en la configuracion de sudoers para conceder privilegios elevados o ejecucion de sudo inusual.
+references:
+    - https://attack.mitre.org/techniques/T1548/001/
+author: Enrique Lopez
+date: 2026/10/14
+logsource:
+    product: linux
+    service: auditd
+detection:
+    selection:
+        type: 'SYSCALL'
+        key: 'privilege_escalation'
+    condition: selection
+falsepositives:
+    - Tareas de mantenimiento administrativo autorizadas.
+level: high
